@@ -1,0 +1,5 @@
+```txt
+flask
+face_recognition
+numpy
+werkzeug
