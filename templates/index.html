@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Photo Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px dashed #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            text-align: center;
+            padding: 10px;
+            background-color: #ffe0b2; /* Light orange for warnings/info */
+            border: 1px solid #ffb74d;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .results h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .image-item {
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #fff;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .image-item img {
+            max-width: 100%;
+            height: 120px; /* Fixed height for consistency */
+            object-fit: cover; /* Crop images to fit */
+            border-radius: 3px;
+        }
+        .image-item p {
+            font-size: 0.9em;
+            word-break: break-all; /* Break long filenames */
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find My Photos!</h1>
+        <p>Upload **one or more** clear photos of your face, and I'll find all the photos you are in from your family photos folder.</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="files" accept="image/*" multiple required>
+            <br>
+            <input type="submit" value="Upload Faces & Find Photos">
+        </form>
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+
+        <div class="results">
+            {% if found_photos %}
+                <h2>Found Your Face In These Photos:</h2>
+                <div class="image-gallery">
+                    {% for photo in found_photos %}
+                        <div class="image-item">
+                            <img src="{{ url_for('family_photos_static', filename=photo) }}" alt="{{ photo }}">
+                            <p>{{ photo }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
